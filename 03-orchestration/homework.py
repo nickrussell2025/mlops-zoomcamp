@@ -18,6 +18,8 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 def read_dataframe(filename: str) -> pd.DataFrame:
     df = pd.read_parquet(filename)
     
+    print(f"total number of records in dataset: {len(df):,}")
+    
     df['duration'] = df.tpep_dropoff_datetime - df.tpep_pickup_datetime
     df.duration = df.duration.dt.total_seconds() / 60
     
