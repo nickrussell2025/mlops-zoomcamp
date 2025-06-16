@@ -10,11 +10,9 @@ def read_data(filename):
     df = pd.read_parquet(filename)
     print(f"Data shape: {df.shape}")
     
-    # Create duration FIRST
     df['duration'] = df.tpep_dropoff_datetime - df.tpep_pickup_datetime
     df['duration'] = df.duration.dt.total_seconds() / 60
-    
-    # THEN print it
+
     print(f"Sample durations: {df['duration'].head()}")
     
     df = df[(df.duration >= 1) & (df.duration <= 60)]
@@ -42,7 +40,7 @@ if __name__ == "__main__":
     df = read_data(url)
     
     categorical = ['PULocationID', 'DOLocationID']
-    val_dicts = df[categorical].to_dict(orient='records')
+    val_dicts = df[categorical + ['trip_distance']].to_dict(orient='records')
     X_val = dv.transform(val_dicts)
     y_pred = model.predict(X_val)
     
